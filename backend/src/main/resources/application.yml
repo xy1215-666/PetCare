@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: petcare-api
+  ai:
+    openai:
+      # Spring AI OpenAI Chat properties; PETCARE_AI_BASE_URL should contain the region/workspace URL.
+      base-url: ${PETCARE_AI_BASE_URL:https://api.openai.com/v1}
+      api-key: ${DASHSCOPE_API_KEY:}
+      timeout: ${PETCARE_AI_TIMEOUT:45s}
+      max-retries: 0
+      chat:
+        model: ${PETCARE_AI_MODEL:qwen3.7-plus}
+        temperature: ${petcare.ai.temperature:0.3}
+        extra-body:
+          enable_thinking: false
+  retry:
+    max-attempts: 1
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/petcare?serverTimezone=Asia/Shanghai&characterEncoding=utf8}
+    username: ${DB_USERNAME:petcare}
+    password: ${DB_PASSWORD:}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration/{vendor}
+
+security:
+  jwt:
+    secret-base64: ${JWT_SECRET_BASE64}
+    issuer: ${JWT_ISSUER:petcare-api}
+    access-token-ttl: ${JWT_ACCESS_TOKEN_TTL:PT15M}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+petcare:
+  ai:
+    enabled: ${PETCARE_AI_ENABLED:false}
+    provider: ${PETCARE_AI_PROVIDER:openai-compatible}
+    model: ${PETCARE_AI_MODEL:qwen3.7-plus}
+    base-url: ${PETCARE_AI_BASE_URL:}
+    temperature: 0.3
+    max-context-messages: 10
+    tool:
+      max-health-days: 30
+      max-weight-days: 90

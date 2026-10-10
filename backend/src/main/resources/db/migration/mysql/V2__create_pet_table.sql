@@ -1,0 +1,22 @@
+CREATE TABLE pet (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    type VARCHAR(10) NOT NULL,
+    breed VARCHAR(80) NULL,
+    gender VARCHAR(10) NOT NULL DEFAULT 'UNKNOWN',
+    birthday DATE NULL,
+    current_weight DECIMAL(7, 3) NULL,
+    neutered BOOLEAN NULL,
+    home_date DATE NULL,
+    remark VARCHAR(500) NULL,
+    create_time TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    update_time TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    deleted TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (id),
+    KEY idx_pet_user_deleted (user_id, deleted),
+    CONSTRAINT chk_pet_type CHECK (type IN ('CAT', 'DOG', 'OTHER')),
+    CONSTRAINT chk_pet_gender CHECK (gender IN ('MALE', 'FEMALE', 'UNKNOWN')),
+    CONSTRAINT chk_pet_weight CHECK (current_weight IS NULL OR current_weight BETWEEN 0.001 AND 500.000),
+    CONSTRAINT chk_pet_deleted CHECK (deleted IN (0, 1))
+);

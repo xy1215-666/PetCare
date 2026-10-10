@@ -1,0 +1,24 @@
+services:
+  api:
+    image: maven:3.9.9-eclipse-temurin-21
+    container_name: petcare-dev-api
+    working_dir: /workspace
+    command: ["mvn", "-B", "-ntp", "spring-boot:run"]
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /workspace
+      - type: bind
+        source: ${USERPROFILE}/.m2
+        target: /root/.m2
+    env_file:
+      - ./.env.docker.local
+    environment:
+      PETCARE_AI_ENABLED: ${PETCARE_AI_ENABLED:-false}
+      PETCARE_AI_BASE_URL: ${PETCARE_AI_BASE_URL:-}
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+      PETCARE_AI_MODEL: ${PETCARE_AI_MODEL:-qwen3.7-plus}
